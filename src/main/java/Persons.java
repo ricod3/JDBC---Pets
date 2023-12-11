@@ -1,8 +1,8 @@
 public class Persons {
-    private int personID;
-    private String firstName;
-    private String lastName;
-    private int householdID;
+    private final int personID;
+    private final String firstName;
+    private final String lastName;
+    private final int householdID;
 
     public Persons(int personID, String firstName, String lastName, int householdID) {
         this.personID = personID;

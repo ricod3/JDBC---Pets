@@ -3,12 +3,10 @@ import java.util.*;
 import java.sql.*;
 
 public class Management {
-    private Connection mysqlConn;
-    private Scanner sc;
+    private final Connection mysqlConn;
 
-    public Management(Connection mysqlConn, Scanner sc) {
+    public Management(Connection mysqlConn) {
         this.mysqlConn = mysqlConn;
-        this.sc = sc;
     }
 
     static void startHousehold(boolean running, Scanner sc, Management management) throws SQLException, InvalidNameException {
@@ -229,14 +227,14 @@ public class Management {
         PreparedStatement pS = mysqlConn.prepareStatement(sqlPrompt);
         pS.setInt(1, household.getHouseholdID());
         pS.setString(2, household.getHouseholdName());
-        int rows = pS.executeUpdate();
+        pS.executeUpdate();
     }
 
     public void deleteHousehold(Household household) throws SQLException {
         String sqlPrompt = "DELETE FROM household WHERE household_id = ?";
         PreparedStatement pS = mysqlConn.prepareStatement(sqlPrompt);
         pS.setInt(1, household.getHouseholdID());
-        int rows = pS.executeUpdate();
+        pS.executeUpdate();
     }
 
     public void createPerson(Persons person) throws SQLException {
@@ -245,7 +243,7 @@ public class Management {
         pS.setString(1, person.getFirstName());
         pS.setString(2, person.getLastName());
         pS.setInt(3, person.getHouseholdID());
-        int rows = pS.executeUpdate();
+        pS.executeUpdate();
     }
 
     public void deletePerson(Persons person) throws SQLException {
@@ -253,7 +251,7 @@ public class Management {
         PreparedStatement pS = mysqlConn.prepareStatement(sqlPrompt);
         pS.setString(1, person.getFirstName());
         pS.setString(2, person.getLastName());
-        int rows = pS.executeUpdate();
+        pS.executeUpdate();
     }
 
     public void createPet(Pets pets) throws SQLException {
@@ -261,21 +259,19 @@ public class Management {
         PreparedStatement pS = mysqlConn.prepareStatement(sqlPrompt);
         pS.setString(1, pets.getPetLabel());
         pS.setInt(2, pets.getPersonID());
-        int rows = pS.executeUpdate();
+        pS.executeUpdate();
     }
 
     public void deletePet(Pets pets) throws SQLException {
         String sqlPrompt = "DELETE FROM pets WHERE pet_id = ?";
         PreparedStatement pS = mysqlConn.prepareStatement(sqlPrompt);
         pS.setInt(1, pets.getPetID());
-        int rows = pS.executeUpdate();
+        pS.executeUpdate();
     }
 
     /**
      * LEFT JOIN for persons, to show all persons regardless whether a pet has been assigned or not
      * JOIN to show all persons who have been assigned to a household
-     *
-     * @throws SQLException
      */
     public void printPersons() throws SQLException {
         System.out.println("Diese Personen existieren bereits in der Datenbank");
@@ -340,7 +336,7 @@ public class Management {
         PreparedStatement pS = mysqlConn.prepareStatement(sqlPrompt);
         pS.setString(1, household.getHouseholdName());
         pS.setInt(2, household.getHouseholdID());
-        int rows = pS.executeUpdate();
+        pS.executeUpdate();
     }
 
     public void updatePerson(Persons person) throws SQLException {
@@ -350,7 +346,7 @@ public class Management {
         pS.setString(2, person.getLastName());
         pS.setInt(3, person.getHouseholdID());
         pS.setInt(4, person.getPersonID());
-        int rows = pS.executeUpdate();
+        pS.executeUpdate();
     }
 
     public void updatePet(Pets pet) throws SQLException {
@@ -359,7 +355,7 @@ public class Management {
         pS.setString(1, pet.getPetLabel());
         pS.setInt(2, pet.getPersonID());
         pS.setInt(3, pet.getPetID());
-        int rows = pS.executeUpdate();
+        pS.executeUpdate();
     }
 }
 

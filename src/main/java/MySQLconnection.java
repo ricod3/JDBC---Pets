@@ -13,11 +13,8 @@ public class MySQLconnection {
             if (mysqlConnection != null) {
                 System.out.println("*** Connection successfull ***");
             }
-            else {
-                System.out.println("!!! Connection failed !!!");
-            }
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("!!! Connection failed !!!");
         }
         return mysqlConnection;
     }

@@ -1,6 +1,6 @@
 public class Household {
-    private int householdID;
-    private String householdName;
+    private final int householdID;
+    private final String householdName;
 
     public Household(int householdID, String householdName) {
         this.householdID = householdID;

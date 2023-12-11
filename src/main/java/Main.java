@@ -16,7 +16,7 @@ public class Main {
 
         Connection mysqlConn = MySQLconnection.dbConnection();
 
-        Management management = new Management(mysqlConn, sc);
+        Management management = new Management(mysqlConn);
         try {
             Management.startHousehold(running, sc, management);
         } catch (SQLException | InvalidNameException e) {

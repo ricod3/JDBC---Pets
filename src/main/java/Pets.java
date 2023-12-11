@@ -1,8 +1,8 @@
 public class Pets {
 
-    private int petID;
-    private String petLabel;
-    private int personID;
+    private final int petID;
+    private final String petLabel;
+    private final int personID;
 
     public int getPetID() {
         return petID;
