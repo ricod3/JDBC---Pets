@@ -4,7 +4,8 @@ public class Persons {
     private String lastName;
     private int householdID;
 
-    public Persons(String firstName, String lastName, int householdID) {
+    public Persons(int personID, String firstName, String lastName, int householdID) {
+        this.personID = personID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.householdID = householdID;

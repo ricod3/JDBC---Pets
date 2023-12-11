@@ -8,7 +8,7 @@ public class Pets {
         return petID;
     }
 
-    public Pets(String petLabel, int personID) {
+    public Pets(int petID, String petLabel, int personID) {
         this.petID = petID;
         this.petLabel = petLabel;
         this.personID = personID;

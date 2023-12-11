@@ -13,221 +13,213 @@ public class Management {
 
     static void startHousehold(boolean running, Scanner sc, Management management) throws SQLException, InvalidNameException {
         while (running) {
-            System.out.println("==================================");
-            System.out.println("|| -- Wählen Sie eine Option -- ||");
-            System.out.println("|| > 1. Neuen Haushalt anlegen  ||");
-            System.out.println("|| > 2. Haushalt ändern         ||");
-            System.out.println("|| > 3. Haushalt löschen        ||");
-            System.out.println("|| > 4. Person anlegen          ||");
-            System.out.println("|| > 5. Person ändern           ||");
-            System.out.println("|| > 6. Person löschen          ||");
-            System.out.println("|| > 7. Haustier anlegen        ||");
-            System.out.println("|| > 8. Haustier ändern         ||");
-            System.out.println("|| > 9. Haustier löschen        ||");
-            System.out.println("|| > 0. Beenden                 ||");
-            System.out.println("==================================");
+            try {
+                System.out.println("==================================");
+                System.out.println("|| -- Wählen Sie eine Option -- ||");
+                System.out.println("|| > 1. Neuen Haushalt anlegen  ||");
+                System.out.println("|| > 2. Haushalt ändern         ||");
+                System.out.println("|| > 3. Haushalt löschen        ||");
+                System.out.println("|| > 4. Person anlegen          ||");
+                System.out.println("|| > 5. Person ändern           ||");
+                System.out.println("|| > 6. Person löschen          ||");
+                System.out.println("|| > 7. Haustier anlegen        ||");
+                System.out.println("|| > 8. Haustier ändern         ||");
+                System.out.println("|| > 9. Haustier löschen        ||");
+                System.out.println("|| > 0. Beenden                 ||");
+                System.out.println("==================================");
 
-            int userInput = sc.nextInt();
-            sc.nextLine();
+                int userInput = sc.nextInt();
+                sc.nextLine();
 
-            switch (userInput) {
-                case 1:
-                    management.printHousehold();
-                    try {
-                        System.out.println("Geben Sie die ID für den neuen Haushalt an: ");
+                switch (userInput) {
+                    case 1:
+                        management.printHousehold();
+                        try {
+                            System.out.println("Geben Sie die ID für den neuen Haushalt an: ");
+                            while (!sc.hasNextInt()) {
+                                System.out.println("Bitte nur Zahlen eingeben. Buchstaben nicht erlaubt!!");
+                                sc.nextLine();
+                            }
+                            int householdID = sc.nextInt();
+                            sc.nextLine();
+                            System.out.println("Geben Sie den Namen für den neuen Haushalt an: ");
+                            String householdName = sc.nextLine();
+                            if (hasDigit(householdName)) {
+                                throw new InvalidNameException("Nur Buchstaben erlaubt, keine Zahlen!!");
+                            }
+                            Household newHousehold = new Household(householdID, householdName);
+                            management.createHousehold(newHousehold);
+                        } catch (InvalidNameException | SQLException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 2:
+                        management.printHousehold();
+                        System.out.println("Sie wollen einen Haushalt ändern. Geben Sie die ID des zu ändernden Haushalts an: ");
                         while (!sc.hasNextInt()) {
                             System.out.println("Bitte nur Zahlen eingeben. Buchstaben nicht erlaubt!!");
                             sc.nextLine();
                         }
                         int householdID = sc.nextInt();
                         sc.nextLine();
-                        System.out.println("Geben Sie den Namen für den neuen Haushalt an: ");
+                        System.out.println("Geben Sie den neuen Namen des Haushaltes ein: ");
                         String householdName = sc.nextLine();
                         if (hasDigit(householdName)) {
                             throw new InvalidNameException("Nur Buchstaben erlaubt, keine Zahlen!!");
                         }
-                        Household newHousehold = new Household(householdID, householdName);
-                        management.createHousehold(newHousehold);
-                    } catch (InvalidNameException | SQLException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 2:
-                    management.printHousehold();
-                    System.out.println("Sie wollen einen Haushalt ändern. Geben Sie die ID des zu ändernden Haushalts an: ");
-                    while (!sc.hasNextInt()) {
-                        System.out.println("Bitte nur Zahlen eingeben. Buchstaben nicht erlaubt!!");
-                        sc.nextLine();
-                    }
-                    int householdID = sc.nextInt();
-                    sc.nextLine();
-                    System.out.println("Geben Sie den neuen Namen des Haushaltes ein: ");
-                    String householdName = sc.nextLine();
-                    if (hasDigit(householdName)) {
-                        throw new InvalidNameException("Nur Buchstaben erlaubt, keine Zahlen!!");
-                    }
-                    Household updateHousehold = new Household(householdID, householdName);
-                    management.updateHousehold(updateHousehold);
-                    break;
-                case 3:
-                    management.printHousehold();
-                    System.out.println("Sie wollen einen Haushalt löschen. Geben Sie die ID des zu löschenden Haushalts an: ");
-                    while (!sc.hasNextInt()) {
-                        System.out.println("Bitte nur Zahlen eingeben. Buchstaben nicht erlaubt!!");
-                        sc.nextLine();
-                    }
-                    householdID = sc.nextInt();
-                    sc.nextLine();
-                    Household deleteHousehold = new Household(householdID, null);
-                    management.deleteHousehold(deleteHousehold);
-                    break;
-                case 4:
-                    management.printPersons();
-                    try {
-                        System.out.println("Person anlegen. Geben Sie den Vornamen der neuen Person ein: ");
-                        String firstName = sc.nextLine();
-                        System.out.println("Nun geben Sie den Nachnamen ein: ");
-                        String lastName = sc.nextLine();
-                        if (hasDigit(firstName) || hasDigit(lastName)) {
-                            throw new InvalidNameException("Nur Buchstaben erlaubt, keine Zahlen!!");
-                        }
+                        Household updateHousehold = new Household(householdID, householdName);
+                        management.updateHousehold(updateHousehold);
+                        break;
+                    case 3:
                         management.printHousehold();
-                        System.out.println("Zu welchem Haushalt gehört die Person? Bitte Haushalt ID angeben: ");
-                        householdID = sc.nextInt();
-                        sc.nextLine();
-                        Persons createPerson = new Persons(firstName, lastName, householdID);
-                        management.createPerson(createPerson);
-                    } catch (InvalidNameException | SQLException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 5:
-                    management.printPersons();
-                    try {
-                        System.out.println("Sie wollen eine Person ändern. Geben Sie die ID der Person ein, die Sie ändern möchten: ");
-                        while (!sc.hasNextInt()) {
-                            System.out.println("Bitte nur Zahlen eingeben. Buchstaben nicht erlaubt!!");
-                            sc.nextLine();
-                        }
-                        int personID = sc.nextInt();
-                        sc.nextLine();
-                        System.out.println("Geben Sie den neuen Vornamen der Person ein: ");
-                        String firstName = sc.nextLine();
-                        System.out.println("Nun geben Sie den Nachnamen ein: ");
-                        String lastName = sc.nextLine();
-                        if (hasDigit(firstName) || hasDigit(lastName)) {
-                            throw new InvalidNameException("Nur Buchstaben erlaubt, keine Zahlen!!");
-                        }
-                        System.out.println("Ordnen Sie die Person einem Haushalt zu: ");
-                        management.printHousehold();
+                        System.out.println("Sie wollen einen Haushalt löschen. Geben Sie die ID des zu löschenden Haushalts an: ");
                         while (!sc.hasNextInt()) {
                             System.out.println("Bitte nur Zahlen eingeben. Buchstaben nicht erlaubt!!");
                             sc.nextLine();
                         }
                         householdID = sc.nextInt();
-                        Persons updatePerson = new Persons(firstName, lastName, householdID);
-                        management.updatePerson(updatePerson);
-                    } catch (InvalidNameException | SQLException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 6:
-                    management.printPersons();
-                    try {
-                        System.out.println("Sie möchten eine Person löschen. Geben Sie den Vornamen der zu löschenden Person ein: ");
-                        String firstName = sc.nextLine();
-                        System.out.println("Nun geben Sie den Nachnamen ein: ");
-                        String lastName = sc.nextLine();
-                        if (hasDigit(firstName) || hasDigit(lastName)) {
-                            throw new InvalidNameException("Nur Buchstaben erlaubt, keine Zahlen!!");
-                        }
-                        management.printHousehold();
-                        System.out.println("Zu welchem Haushalt gehört die Person? Bitte Haushalt ID angeben: ");
-                        while (!sc.hasNextInt()) {
-                            System.out.println("Nur Zahlen erlaubt, keine Buchstaben!!");
-                            sc.nextLine();
-                        }
-                        householdID = sc.nextInt();
                         sc.nextLine();
-                        Persons deletePerson = new Persons(firstName, lastName, householdID);
-                        management.deletePerson(deletePerson);
-                    } catch (InvalidNameException | SQLException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 7:
-                    management.printPets();
-                    try {
-                        System.out.println("Sie möchten ein neues Haustier anlegen. Geben Sie die Bezeichnung / den Namen des Tiers an: ");
-                        String petLabel = sc.nextLine();
-                        if (hasDigit(petLabel)) {
-                            throw new InvalidNameException("Nur Buchstaben erlaubt, keine Zahlen!!");
-                        }
+                        Household deleteHousehold = new Household(householdID, null);
+                        management.deleteHousehold(deleteHousehold);
+                        break;
+                    case 4:
                         management.printPersons();
-                        System.out.println("Zu wem gehört das Haustier? Geben Sie die Person ID an: ");
-                        while (!sc.hasNextInt()) {
-                            System.out.println("Bitte nur Zahlen (ID) eingeben!!");
+                        try {
+                            System.out.println("Person anlegen. Geben Sie den Vornamen der neuen Person ein: ");
+                            String firstName = sc.nextLine();
+                            System.out.println("Nun geben Sie den Nachnamen ein: ");
+                            String lastName = sc.nextLine();
+                            if (hasDigit(firstName) || hasDigit(lastName)) {
+                                throw new InvalidNameException("Nur Buchstaben erlaubt, keine Zahlen!!");
+                            }
+                            management.printHousehold();
+                            System.out.println("Zu welchem Haushalt gehört die Person? Bitte Haushalt ID angeben: ");
+                            householdID = sc.nextInt();
                             sc.nextLine();
+                            Persons createPerson = new Persons(0, firstName, lastName, householdID);
+                            management.createPerson(createPerson);
+                        } catch (InvalidNameException | SQLException e) {
+                            e.printStackTrace();
                         }
-                        int personID = sc.nextInt();
-                        sc.nextLine();
-                        Pets createPet = new Pets(petLabel, personID);
-                        management.createPet(createPet);
-                    } catch (InvalidNameException | SQLException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 8:
-                    management.printPets();
-                    try {
-                        System.out.println("Sie wollen einen Haustier ändern. Geben Sie die ID des zu ändernden Haustiers an: ");
-                        while (!sc.hasNextInt()) {
-                            System.out.println("Bitte nur Zahlen eingeben. Buchstaben nicht erlaubt!!");
-                            sc.nextLine();
-                        }
-                        int petID = sc.nextInt();
-                        sc.nextLine();
-                        System.out.println("Geben Sie den neuen Namen des Haustieres ein: ");
-                        String petLabel = sc.nextLine();
-                        if (hasDigit(petLabel)) {
-                            throw new InvalidNameException("Nur Buchstaben erlaubt, keine Zahlen!!");
-                        }
-                        System.out.println("Welcher Person wollen Sie das Haustier zuordnen? Geben Sie die Personen ID ein: ");
-                        while (!sc.hasNextInt()) {
-                            System.out.println("Bitte nur Zahlen eingeben. Buchstaben nicht erlaubt!!");
-                            sc.nextLine();
-                        }
-                        int personID = sc.nextInt();
-                        sc.nextLine();
-                        Pets updatePet = new Pets(petLabel, personID);
-                        management.updatePet(updatePet);
-                    } catch (InvalidNameException | SQLException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 9:
-                    management.printPets();
-                    try {
-                        System.out.println("Sie möchten ein Haustier löschen. Geben Sie die Bezeichnung / den Namen des Tiers an: ");
-                        String petLabel = sc.nextLine();
-                        if (hasDigit(petLabel)) {
-                            throw new InvalidNameException("Nur Buchstaben erlaubt, keine Zahlen!!");
-                        }
+                        break;
+                    case 5:
                         management.printPersons();
-                        System.out.println("Zu wem gehört das Haustier? Geben Sie die Person ID an: ");
-                        while (!sc.hasNextInt()) {
-                            throw new RuntimeException("Nur Zahlen erlaubt!!");
+                        try {
+                            System.out.println("Sie wollen eine Person ändern. Geben Sie die ID der Person ein, die Sie ändern möchten: ");
+                            while (!sc.hasNextInt()) {
+                                System.out.println("Bitte nur Zahlen eingeben. Buchstaben nicht erlaubt!!");
+                                sc.nextLine();
+                            }
+                            int personID = sc.nextInt();
+                            sc.nextLine();
+                            System.out.println("Geben Sie den neuen Vornamen der Person ein: ");
+                            String firstName = sc.nextLine();
+                            System.out.println("Nun geben Sie den Nachnamen ein: ");
+                            String lastName = sc.nextLine();
+                            if (hasDigit(firstName) || hasDigit(lastName)) {
+                                throw new InvalidNameException("Nur Buchstaben erlaubt, keine Zahlen!!");
+                            }
+                            System.out.println("Ordnen Sie die Person einem Haushalt zu: ");
+                            management.printHousehold();
+                            while (!sc.hasNextInt()) {
+                                System.out.println("Bitte nur Zahlen eingeben. Buchstaben nicht erlaubt!!");
+                                sc.nextLine();
+                            }
+                            householdID = sc.nextInt();
+                            Persons updatePerson = new Persons(personID, firstName, lastName, householdID);
+                            management.updatePerson(updatePerson);
+                        } catch (InvalidNameException | SQLException e) {
+                            e.printStackTrace();
                         }
-                        int personID = sc.nextInt();
-                        sc.nextLine();
-                        Pets deletePet = new Pets(petLabel, personID);
-                        management.deletePet(deletePet);
-                    } catch (InvalidNameException | SQLException e) {
-                        e.printStackTrace();
-                    }
-                case 0:
-                    running = false;
-                    break;
+                        break;
+                    case 6:
+                        management.printPersons();
+                        try {
+                            System.out.println("Sie wollen eine Person löschen. Geben Sie die ID der zu löschenden Person an: ");
+                            while (!sc.hasNextInt()) {
+                                throw new InvalidNameException("Bitte nur Zahlen eingeben. Buchstaben sind nicht erlaubt!!");
+                            }
+                            int personID = sc.nextInt();
+                            sc.nextLine();
+                            Persons deletePerson = new Persons(personID, null, null, 0);
+                            management.deletePerson(deletePerson);
+                        } catch (InvalidNameException | SQLException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 7:
+                        management.printPets();
+                        try {
+                            System.out.println("Sie möchten ein neues Haustier anlegen. Geben Sie die Bezeichnung / den Namen des Tiers an: ");
+                            String petLabel = sc.nextLine();
+                            if (hasDigit(petLabel)) {
+                                throw new InvalidNameException("Nur Buchstaben erlaubt, keine Zahlen!!");
+                            }
+                            management.printPersons();
+                            System.out.println("Zu wem gehört das Haustier? Geben Sie die Person ID an: ");
+                            while (!sc.hasNextInt()) {
+                                System.out.println("Bitte nur Zahlen (ID) eingeben!!");
+                                sc.nextLine();
+                            }
+                            int personID = sc.nextInt();
+                            sc.nextLine();
+                            Pets createPet = new Pets(0, petLabel, personID);
+                            management.createPet(createPet);
+                        } catch (InvalidNameException | SQLException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 8:
+                        management.printPets();
+                        try {
+                            System.out.println("Sie wollen einen Haustier ändern. Geben Sie die ID des zu ändernden Haustiers an: ");
+                            while (!sc.hasNextInt()) {
+                                System.out.println("Bitte nur Zahlen eingeben. Buchstaben nicht erlaubt!!");
+                                sc.nextLine();
+                            }
+                            int petID = sc.nextInt();
+                            sc.nextLine();
+                            System.out.println("Geben Sie den neuen Namen des Haustieres ein: ");
+                            String petLabel = sc.nextLine();
+                            if (hasDigit(petLabel)) {
+                                throw new InvalidNameException("Nur Buchstaben erlaubt, keine Zahlen!!");
+                            }
+                            System.out.println("Welcher Person wollen Sie das Haustier zuordnen? Geben Sie die Personen ID ein: ");
+                            while (!sc.hasNextInt()) {
+                                System.out.println("Bitte nur Zahlen eingeben. Buchstaben nicht erlaubt!!");
+                                sc.nextLine();
+                            }
+                            int personID = sc.nextInt();
+                            sc.nextLine();
+                            Pets updatePet = new Pets(petID, petLabel, personID);
+                            management.updatePet(updatePet);
+                        } catch (InvalidNameException | SQLException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 9:
+                        management.printPets();
+                        try {
+                            System.out.println("Sie möchten ein Haustier löschen. Geben Sie die ID des zu löschenden Haustiers an: ");
+                            while (!sc.hasNextInt()) {
+                                System.out.println("Bitte nur Zahlen eingeben. Buchstaben nicht erlaubt!!");
+                                sc.nextLine();
+                            }
+                            int petID = sc.nextInt();
+                            sc.nextLine();
+                            Pets deletePet = new Pets(petID, null, 0);
+                            management.deletePet(deletePet);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 0:
+                        running = false;
+                        break;
+                }
+            } catch (InputMismatchException ie) {
+                System.out.println("Eingabe ungültig. Bitte korrekte Eingabe tätigen!!");
+                sc.nextLine();
             }
         }
     }
@@ -273,15 +265,17 @@ public class Management {
     }
 
     public void deletePet(Pets pets) throws SQLException {
-        String sqlPrompt = "DELETE FROM pets WHERE pet_label = ?";
+        String sqlPrompt = "DELETE FROM pets WHERE pet_id = ?";
         PreparedStatement pS = mysqlConn.prepareStatement(sqlPrompt);
-        pS.setString(1, pets.getPetLabel());
+        pS.setInt(1, pets.getPetID());
         int rows = pS.executeUpdate();
     }
 
-    /** LEFT JOIN for persons, to show all persons regardless whether a pet has been assigned or not
-     *  JOIN to show all persons who have been assigned to a household
-     *  @throws SQLException
+    /**
+     * LEFT JOIN for persons, to show all persons regardless whether a pet has been assigned or not
+     * JOIN to show all persons who have been assigned to a household
+     *
+     * @throws SQLException
      */
     public void printPersons() throws SQLException {
         System.out.println("Diese Personen existieren bereits in der Datenbank");
@@ -298,10 +292,10 @@ public class Management {
 
             System.out.println(
                     ">>> Person ID: " + personID +
-                    " | Vorname: " + firstName +
-                    " | Nachname: " + lastName +
-                    " | Haushalt: " + householdName +
-                    " | Haustier: " + petLabel
+                            " | Vorname: " + firstName +
+                            " | Nachname: " + lastName +
+                            " | Haushalt: " + householdName +
+                            " | Haustier: " + petLabel
             );
         }
     }
