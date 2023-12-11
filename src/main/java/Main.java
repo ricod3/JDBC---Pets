@@ -1,25 +1,26 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
+/*
+ *  Downloaded mysql-connector-java-8.0.28 and implemented into module JDBC---Pets
+ *  as new project library
+ *  Database is a MySQL Cloud Database, hosted by aiven.io / DigitalOcean server
+ *  in Frankfurt, Germany
+ */
 
+import javax.naming.InvalidNameException;
+import java.sql.*;
+import java.util.*;
 public class Main {
     public static void main(String[] args) {
 
-        Connection mysqlConnection = null;
+        Scanner sc = new Scanner(System.in);
+        boolean running = true;
 
+        Connection mysqlConn = MySQLconnection.dbConnection();
+
+        Management management = new Management(mysqlConn, sc);
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            mysqlConnection = DriverManager.getConnection("jdbc:mysql://mysql-3caa43ed-rico-88c5.a.aivencloud.com:22995/codersbay-pets","avnadmin","AVNS_EwJ2Wr9Qt13jJTX0x_9");
-
-            if (mysqlConnection != null) {
-                System.out.println("*** Connection successfull ***");
-            }
-            else {
-                System.out.println("!!! Connection failed !!!");
-            }
-        } catch (Exception e) {
-            System.out.println(e);
+            Management.startHousehold(running, sc, management);
+        } catch (SQLException | InvalidNameException e) {
+            throw new RuntimeException(e);
         }
-
-        System.out.println("Testoutput");
     }
 }
