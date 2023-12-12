@@ -5,7 +5,7 @@
 Erstelle ein Programm, welches einen Haushalt mit Personen und Haustieren modelliert und in einer Datenbank persistent speichert.
 Hierfür sollen beliebig viele Haushalte angelegt werden können. Jeder Haushalt besteht aus 1 bis n Personen und jeder Person sind 0 bis m Haustiere zugeordnet.
 
-### Es sollen die üblichen Management Methoden einer Datenbank nutzbar sein.
+### Es sollen die üblichen Householdmanagement Methoden einer Datenbank nutzbar sein.
 Create(Haushalt)
 Create(Person, haushalt_id)
 Create(Haustier, person_id)
